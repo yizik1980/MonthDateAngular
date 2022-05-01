@@ -1,0 +1,26 @@
+<div class="wrap">
+    <div class="txt-bind">
+        <input type="text" [value]="txt" name="month" (focus)="open()" />
+    </div>
+    <div class="content">
+        <div [ngSwitch]="monthView">
+            <div *ngSwitchCase="'month'">
+                <div class="months">
+                    <ul>
+                        <li *ngFor="let m of monthList" (click)="selectMonth(m)" id="{{m.monthNumber}}"><span>{{m.name}}</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngSwitchCase="'year'">
+                <div class="years">
+                    <ul>
+                        <li *ngFor="let y of years" (click)="selectYear(y)"><span>{{y}}</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngSwitchDefault></div>
+        </div>
+
+
+    </div>
+</div>
