@@ -1,0 +1,11 @@
+<header>
+    <nav>
+        <aside *ngIf="(files$ | async) as filesList">
+            <span (click)="toggle()">רשימת קבצים <b class="ball">{{filesList.length}}</b></span>
+            <ul *ngIf="show">
+                <li *ngFor="let file of filesList" data-k="$index"><span>{{file}}</span></li>
+            </ul>
+        </aside>
+
+    </nav>
+</header>

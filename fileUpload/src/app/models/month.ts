@@ -17,3 +17,8 @@ export interface DateMonth extends Date {
   monthNumber: number;
   year:number;
 }
+export class globalRegex {
+  constructor(){}
+  static hebLetters = /^[a-zA-Z\u0590-\u05FF\u200f\u200e ]+$/;
+  static digits = /[0-9]/;
+}

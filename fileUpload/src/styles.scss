@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+
+* {
+    box-sizing: content-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Arial, Helvetica, sans-serif, 'Trebuchet MS';
+}
+
+app-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+li,
+ul {
+    list-style: none;
+}
+
+section,
+header,
+nav {
+    display: block;
+}

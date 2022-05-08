@@ -1,0 +1,4 @@
+<div class="wrap">
+    <span class="error" *ngIf="errorMessage">{{errorMessage}}</span>
+    <input type="file" (change)="fileUpload($event)" name="fileInput" id="file">
+</div>

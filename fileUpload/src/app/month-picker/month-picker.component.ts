@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DateMonth, months } from '../models/month';
+import { DateMonth, globalRegex, months } from '../models/month';
 
 type datePick = 'month' | 'year' | '';
 @Component({
@@ -12,9 +12,9 @@ export class MonthPickerComponent implements OnInit {
   monthList = new Array<DateMonth>();
   currentYear = 0;
   years = new Array<number>();
-  txt = ''
+  txt = '';
 
-  monthView:datePick = '';
+  monthView: datePick = '';
   constructor() {
     const m = new Date().getMonth() + 1;
     this.current.monthNumber = m;
@@ -32,7 +32,7 @@ export class MonthPickerComponent implements OnInit {
   ngOnInit(): void {}
   open() {
     this.monthView = 'month';
-  };
+  }
   toggelOpen() {
     this.monthView = 'year';
   }
@@ -41,7 +41,6 @@ export class MonthPickerComponent implements OnInit {
   }
   clear() {
     this.monthView = '';
-
   }
   selectMonth(m: DateMonth) {
     this.current = m;
@@ -49,10 +48,25 @@ export class MonthPickerComponent implements OnInit {
     this.monthView = 'year';
   }
   selectYear(y: number) {
-
     this.currentYear = y;
     this.current.year = y;
-    this.txt += ' '+y;
+    this.txt += ' ' + y;
     this.monthView = '';
+  }
+  keyupHandler($event: KeyboardEvent) {
+    $event.preventDefault();
+    const target = ($event.target || $event.srcElement) as HTMLInputElement;
+    const keypress = $event.key;
+    if (globalRegex.hebLetters.test(keypress)) {
+      this.monthList = this.monthList.filter((it) => {
+        return new RegExp(target.value).test(it.name);
+      });
+    }
+
+    if (globalRegex.digits.test(keypress)) {
+      this.years = this.years.filter((it) => {
+        return new RegExp(target.value).test(it.toString());
+      });
+    }
   }
 }

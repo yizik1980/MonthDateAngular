@@ -1,6 +1,6 @@
 <div class="wrap">
     <div class="txt-bind">
-        <input type="text" [value]="txt" name="month" (focus)="open()" />
+        <input type="text" [value]="txt" (keyup)="keyupHandler($event)" name="month" (focus)="open()" />
     </div>
     <div class="content">
         <div [ngSwitch]="monthView">
