@@ -1,10 +1,19 @@
 <header>
     <nav>
-        <aside *ngIf="(files$ | async) as filesList">
-            <span (click)="toggle()">רשימת קבצים <b class="ball">{{filesList.length}}</b></span>
+        <aside>
+            <div class="flex around cursor" (click)="toggle()">
+                <b class="ball ">{{filesList.length}}</b>
+                <span>רשימת קבצים </span>
+            </div>
+
             <ul *ngIf="show">
-                <li *ngFor="let file of filesList" data-k="$index"><span>{{file}}</span></li>
+                <li class="flex" *ngFor="let file of filesList" data-k="$index">
+                    <span (click)="downloadFile(file)" class="file cursor"><i></i></span>
+                    <span class="txt">{{file}}</span>
+
+                </li>
             </ul>
+            <div *ngIf="show" (click)="toggle()" class="back-tap"></div>
         </aside>
 
     </nav>

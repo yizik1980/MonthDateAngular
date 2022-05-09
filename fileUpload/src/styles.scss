@@ -8,6 +8,7 @@
 
 body {
     font-family: 'Gill Sans', 'Gill Sans MT', Arial, Helvetica, sans-serif, 'Trebuchet MS';
+    direction: rtl;
 }
 
 app-main {
@@ -27,4 +28,46 @@ section,
 header,
 nav {
     display: block;
+}
+
+.p-2 {
+    padding: 2%;
+}
+
+.flex {
+    display: flex;
+}
+
+.around {
+    justify-content: space-around;
+}
+
+button {
+    transition: all .4s ease-in-out;
+    padding: 4px 7px 5px;
+    border-radius: 3px;
+    font-weight: 100;
+    overflow: hidden;
+    word-wrap: normal;
+    white-space: nowrap;
+    width: auto;
+    background-color: aquamarine;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.center {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.col {
+    flex-direction: column;
+}
+
+.gap-20 {
+    gap: 20px;
 }

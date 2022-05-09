@@ -1,4 +1,13 @@
 <div class="wrap">
-    <span class="error" *ngIf="errorMessage">{{errorMessage}}</span>
-    <input type="file" (change)="fileUpload($event)" name="fileInput" id="file">
+    <div class="flex center p-2 col gap-20">
+        <div class="upload-file" (click)="clickInputFile($event)"></div>
+        <label>ניתן לשנות שם הקובץ</label>
+        <input type="text" placeholder="ניתן לשנות שם הקובץ" [(ngModel)]="fileName" />
+
+        <button type="button" (click)="submitFile()">שמירה</button>
+    </div>
+
+
+    <input type="file" #inputFile (change)="fileUpload($event)" name="fileInput" id="file">
+
 </div>

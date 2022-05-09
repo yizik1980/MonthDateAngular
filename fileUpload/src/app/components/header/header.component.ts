@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { FileInfoService } from 'src/app/services/file-info.service';
 
 @Component({
@@ -10,17 +10,26 @@ import { FileInfoService } from 'src/app/services/file-info.service';
 export class HeaderComponent implements OnInit {
   show = false;
   files$ = new Observable<string[]>();
-  constructor(private fileInfo:FileInfoService) {}
+  filesList = new Array<string>();
+  constructor(private fileInfo: FileInfoService) {}
 
   ngOnInit(): void {
-    this.files$ = this.fileInfo.getFileList();
-    this.fileInfo.notifier.subscribe(res=>{
-        if(res){
-          this.files$.subscribe();
-        }
+    this.files$ = this.fileInfo.getFileList().pipe(
+      tap((files) => {
+        this.filesList = files;
+        return files;
+      })
+    );
+    this.fileInfo.notifier.subscribe((res) => {
+      if (res) {
+        this.files$.subscribe();
+      }
     });
   }
   toggle() {
     this.show = !this.show;
+  }
+  downloadFile(item:string){
+    this.fileInfo.downloadFile(item);
   }
 }

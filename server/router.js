@@ -24,9 +24,14 @@ apiRouter.post('/upload', fileUpload({ parseNested: true }), async function(req,
     }
     const files = req.files;
     for (let f in files) {
-        let mvResult = await files[f].mv(dirname + '/upload-files/' + files[f].name);
-        if (mvResult)
-            return res.status(500).json(mvResult);
+        let err = await files[f].mv(dirname + '/upload-files/' + files[f].name);
+        if (err)
+            return res.status(500).json({ err, success: false });
         res.status(200).json({ message: files[f].name + ' was uploaded nicely', success: true });
     }
+});
+apiRouter.get('/download/:fileName', function(req, res) {
+    console.log(req.params, req.query);
+    const file = path.join() + '/upload-files/' + req.params.fileName;
+    res.download(file); // Set disposition and send it.
 });
