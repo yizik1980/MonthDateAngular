@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HotToastService } from '@ngneat/hot-toast';
-import { finalize, Observable, of, Subscription } from 'rxjs';
+import { finalize, Subscription } from 'rxjs';
 import { filehandler } from 'src/app/models/fileHandler';
 import { FileInfoService } from 'src/app/services/file-info.service';
 
