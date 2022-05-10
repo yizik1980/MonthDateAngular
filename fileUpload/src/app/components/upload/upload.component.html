@@ -1,13 +1,16 @@
 <div class="wrap">
     <div class="flex center p-2 col gap-20">
-        <div class="upload-file" (click)="clickInputFile($event)"></div>
-        <label>ניתן לשנות שם הקובץ</label>
-        <input type="text" placeholder="ניתן לשנות שם הקובץ" [(ngModel)]="fileName" />
+        <ng-container *ngIf="editFile else uploadFile"></ng-container>
 
+        <label>ניתן לשנות שם הקובץ</label>
+        <input type="text" placeholder="ניתן לשנות שם הקובץ" [disabled]="!editFile" [(ngModel)]="fileName" />
         <button type="button" (click)="submitFile()">שמירה</button>
     </div>
-
-
-    <input type="file" #inputFile (change)="fileUpload($event)" name="fileInput" id="file">
+    <input type="file" #inputFile (change)="fileUpload($event)" (blur)="fileUploadBlur($event)" name="fileInput" id="file">
 
 </div>
+
+<ng-template #uploadFile>
+    <label>לחץ להעלאת קובץ</label>
+    <div title="לחץ להעלאת קובץ " class="upload-file" (click)="clickInputFile($event)"></div>
+</ng-template>

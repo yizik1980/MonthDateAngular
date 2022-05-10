@@ -16,15 +16,17 @@ import { environment } from 'src/environments/environment';
 export class FileInfoService {
   notifier = new BehaviorSubject<boolean>(true);
   constructor(private http: HttpClient) {}
+
   getFileList(): Observable<Array<string>> {
     return this.http.get<Array<string>>(environment.webApiFiles);
   }
-  uploadFile(file: File,fileName:string): Observable<{ message: string } | null> {
+
+  uploadFile(file: File,fileName:string): Observable<{message: string; success: boolean }> {
     let formData = new FormData();
     formData.append('file', file, fileName);
     return this.postFile(formData);
   }
-  private postFile(formData: FormData): Observable<{ message: string }> {
+  private postFile(formData: FormData): Observable<{ message: string; success: boolean }> {
     return this.http
       .post<{ message: string; success: boolean }>(
         `${environment.webApiFiles}/upload`,
@@ -34,13 +36,7 @@ export class FileInfoService {
           observe: 'body',
         }
       )
-      .pipe(
-        tap((res) => {
-          if (res.success) {
-            this.notifier.next(res.success);
-          }
-        })
-      );
+      
   }
   downloadFile(name: string): void {
     const link = document.createElement('a');

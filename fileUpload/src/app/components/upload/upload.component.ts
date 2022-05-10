@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HotToastService } from '@ngneat/hot-toast';
-import { finalize, Subscription } from 'rxjs';
+import { catchError, finalize, map, Subscription } from 'rxjs';
 import { filehandler } from 'src/app/models/fileHandler';
 import { FileInfoService } from 'src/app/services/file-info.service';
 
@@ -16,7 +16,7 @@ import { FileInfoService } from 'src/app/services/file-info.service';
   styleUrls: ['./upload.component.scss'],
 })
 export class UploadComponent implements OnInit, OnDestroy {
-  fileName: string = 'עלה קובץ';
+  fileName: string = '';
   errorMessage = '';
   file = {} as File;
   handler = new filehandler({
@@ -32,6 +32,7 @@ export class UploadComponent implements OnInit, OnDestroy {
     ],
     maxSize: 1000000,
   });
+  editFile = false;
   @ViewChild('inputFile')
   inputFileUpload: ElementRef | undefined;
 
@@ -45,7 +46,10 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {}
-
+  fileUploadBlur($event: Event){
+    debugger;
+    
+  }
   fileUpload($event: Event) {
     let files = ($event.target as HTMLInputElement).files;
     if (files) {
@@ -64,29 +68,44 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
   clickInputFile($event: Event) {
     (this.inputFileUpload?.nativeElement as HTMLInputElement).click();
+    this.editFile = true;
   }
   submitFile() {
     if (this.file.size > 0) {
       const subListener = this.uploadService
         .uploadFile(this.file, this.fileName)
         .pipe(
+          map((res) => {
+            if (res?.success) {
+              this.uploadService.notifier.next(res.success);
+              this.toastr.success(res?.message);
+            }
+            return res?.message;
+          })
+        ).pipe(
+          catchError((err:any) => {
+            this.toastr.error(err?.error.message);
+            return err;
+          })
+        )
+        .pipe(
           finalize(() => {
             // clear file
             this.clear();
           })
         )
-        .subscribe((res) => {
-          this.toastr.success(res?.message);
-        });
+        
+        .subscribe();
 
       this.subs = [subListener];
     } else {
-      this.toastr.error('העלה קובץ בלחץ העליון לפני שמירה');
+      this.toastr.error('לחץ על כפתור העלאת קובץ העליון לפני שמירה');
     }
   }
   clear() {
     this.fileName = '';
     this.file = {} as File;
     (this.inputFileUpload?.nativeElement as HTMLInputElement).value = '';
+    this.editFile = false;
   }
 }
