@@ -19,19 +19,17 @@ export class UploadComponent implements OnInit, OnDestroy {
   fileName: string = '';
   errorMessage = '';
   file = {} as File;
+
   handler = new filehandler({
     mimeTpes: [
       'application/pdf',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/msword',
-      'image/tiff',
-      'image/png',
-      'image/jpeg',
-      'image/gif',
+      'application/msword'
     ],
     maxSize: 1000000,
   });
+
   editFile = false;
   @ViewChild('inputFile')
   inputFileUpload: ElementRef | undefined;
@@ -46,10 +44,7 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {}
-  fileUploadBlur($event: Event){
-    debugger;
-    
-  }
+
   fileUpload($event: Event) {
     let files = ($event.target as HTMLInputElement).files;
     if (files) {

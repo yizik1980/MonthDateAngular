@@ -1,42 +1,49 @@
-import {
-  HttpClient,
-  HttpEvent,
-  HttpRequest,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
-import { tap } from 'rxjs/internal/operators/tap';
 import { environment } from 'src/environments/environment';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileInfoService {
   notifier = new BehaviorSubject<boolean>(true);
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private fileStore: StorageService) {}
 
   getFileList(): Observable<Array<string>> {
-    return this.http.get<Array<string>>(environment.webApiFiles);
+    return this.http.get<Array<string>>(environment.webApiFiles).pipe(
+      tap((list) => {
+        this.fileStore.initFiles(list);
+      })
+    );
   }
 
-  uploadFile(file: File,fileName:string): Observable<{message: string; success: boolean }> {
+  uploadFile(
+    file: File,
+    fileName: string
+  ): Observable<{ message: string; success: boolean }> {
     let formData = new FormData();
     formData.append('file', file, fileName);
-    return this.postFile(formData);
+    return this.postFile(formData).pipe(
+      tap((res) => {
+        if (res.success) this.fileStore.updatFile(fileName);
+      })
+    );
   }
-  private postFile(formData: FormData): Observable<{ message: string; success: boolean }> {
-    return this.http
-      .post<{ message: string; success: boolean }>(
-        `${environment.webApiFiles}/upload`,
-        formData,
-        {
-          reportProgress: true,
-          observe: 'body',
-        }
-      )
-      
+
+  private postFile(
+    formData: FormData
+  ): Observable<{ message: string; success: boolean }> {
+    return this.http.post<{ message: string; success: boolean }>(
+      `${environment.webApiFiles}/upload`,
+      formData,
+      {
+        reportProgress: true,
+        observe: 'body',
+      }
+    );
   }
   downloadFile(name: string): void {
     const link = document.createElement('a');

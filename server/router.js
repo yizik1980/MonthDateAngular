@@ -47,7 +47,14 @@ apiRouter.post('/upload', fileUpload({ parseNested: true }), async function(req,
     }
 });
 // download web api service for folder above 
-apiRouter.get('/download/:fileName', function(req, res) {
+apiRouter.get('/download/:fileName', async function(req, res) {
+
     const file = uploadedUrl + '/' + req.params.fileName;
-    res.download(file);
+    const exist = await fs.existsSync(file);
+    console.log(exist);
+    if (exist) {
+        res.download(file);
+        return;
+    }
+    res.send('not exist such file');
 });
